@@ -1,0 +1,34 @@
+{
+    "name": "liuyuanjun/ssapi",
+    "description": "A simple Laravel server to server api sign and verify class. ",
+    "version": "1.0.0",
+    "keywords": ["laravel", "api", "sign", "verify"],
+    "homepage": "https://github.com/liuyuanjun/ssapi",
+    "authors": [
+        {
+            "name": "LiuYuanjun",
+            "email": "lane@live.cn"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0",
+        "laravel": ">=5.5",
+        "ixudra/curl": "6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Liuyuanjun\\SsApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Liuyuanjun\\SsApi\\SsApiServiceProvider"
+            ],
+            "aliases": {
+                "SsApi": "Liuyuanjun\\SsApi\\Facades\\SsApi"
+            }
+        }
+    }
+}
