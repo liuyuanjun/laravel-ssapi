@@ -15,6 +15,11 @@ class SsApi
      */
     protected $appKey;
     /**
+     * 用于适配部分应用app_key参数名不同
+     * @var string
+     */
+    protected $appKeyAlias;
+    /**
      * @var string
      */
     protected $appSecret;
@@ -33,7 +38,8 @@ class SsApi
     public function __construct(array $config)
     {
         $this->apiUrl = $config['api_url'];
-        $this->appKey = $config['api_key'];
+        $this->appKey = $config['app_key'];
+        $this->appKeyAlias = $config['app_key_alias'] ?? 'app_key';
         $this->appSecret = $config['app_secret'];
         $this->timeDiff = $config['time_diff'] ?? 300;
     }
@@ -51,8 +57,9 @@ class SsApi
     {
         $this->sign($data);
         // 用法：https://github.com/ixudra/curl
-        $response = Curl::to($this->apiUrl . '/' . rtrim($api, '/'))
-            ->withData($data)
+        $curl = Curl::to($this->apiUrl . '/' . rtrim($api, '/'));
+        App::environment('local') && $curl->enableDebug(storage_path('logs/ssapi/curl.log'));
+        $response = $curl->withData($data)
             ->withHeaders($headers)
             ->asJson()
             ->$method();
@@ -73,8 +80,8 @@ class SsApi
         $name = strtolower($name);
         if (!in_array($name, ['get', 'post', 'put', 'patch', 'delete']))
             throw new \Exception('undefined method.');
-        return retry($this->retryTimes, function () use ($name, $arguments) {
-            return $this->request($arguments[0], $arguments[1], $name, $arguments[2]);
+        return retry($this->_retryTimes, function () use ($name, $arguments) {
+            return $this->request($arguments[0], $arguments[1] ?? [], $name, $arguments[2] ?? []);
         }, 0);
     }
 
@@ -87,7 +94,8 @@ class SsApi
     {
         if (isset($data['_sign']))
             unset($data['_sign']);
-        $data['app_key'] = $this->appKey;
+
+        $data[$this->appKeyAlias] = $this->appKey;
         $data['_timestamp'] = date('Y-m-d H:i:s');
         $signStr = $this->appSecret;
         ksort($data);
