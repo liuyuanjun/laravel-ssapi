@@ -28,7 +28,7 @@ class SsApi
      * 验证请求时间误差
      * @var int
      */
-    protected $timeDiff;
+    protected static $timeDiff = 300;
 
     /**
      * 请求重试次数
@@ -42,7 +42,6 @@ class SsApi
         $this->appKey = $config['app_key'];
         $this->appKeyAlias = $config['app_key_alias'] ?? 'app_key';
         $this->appSecret = $config['app_secret'];
-        $this->timeDiff = $config['time_diff'] ?? 300;
     }
 
     /**
@@ -111,27 +110,26 @@ class SsApi
     /**
      * 服务端验证签名
      * @param array $data
-     * @param array $config [app_secret, time_diff]
+     * @param string $secret
      * @return bool
      */
-    public static function verify($data, $config)
+    public static function verify($data, $secret)
     {
-        $config['time_diff'] = $config['time_diff'] ?? 300;
         if (!isset($data['_timestamp']) || !isset($data['_sign']))
             return false; //Arguments missing
         $timestamp = strtotime($data['_timestamp']);
-        if ($timestamp < (time() - $config['time_diff']) || $timestamp > (time() + $config['time_diff']))
+        if ($timestamp < (time() - static::$timeDiff) || $timestamp > (time() + static::$timeDiff))
             return false; //Invalid timestamp
         $originSign = $data['_sign'];
         unset($data['_sign']);
         ksort($data);
-        $signStr = $config['app_secret'];
+        $signStr = $secret;
         foreach ($data as $key => $val) {
             $val = strval($val);
             if ($key != '' && strpos($val, '@') !== 0)
                 $signStr .= $key . $val;
         }
-        $sign = strtoupper(md5($signStr . $config['app_secret']));
+        $sign = strtoupper(md5($signStr . $secret));
         if ($sign !== $originSign)
             return false; //Signature verification failed
         return true;

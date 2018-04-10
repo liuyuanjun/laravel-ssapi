@@ -5,7 +5,6 @@ return [
         'api_url' => 'http://xxxxx',
         'app_key' => 'xxxxx',
         'app_secret' => 'xxxxx',
-        'time_diff' => 300,
         'app_key_alias' => 'app_id', //用于适配部分应用app_key参数名不同
     ],
 ];

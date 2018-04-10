@@ -28,12 +28,12 @@ class SsApiService
     /**
      * 服务端验证签名
      * @param array $data
-     * @param array $config [app_secret, time_diff]
+     * @param string $secret
      * @return bool
      */
-    public function verify($data, $config)
+    public function verify($data, $secret)
     {
-        return SsApi::verify($data, $config);
+        return SsApi::verify($data, $secret);
     }
 
 }
