@@ -1,7 +1,7 @@
 {
     "name": "liuyuanjun/ssapi",
     "description": "A simple Laravel server to server api sign and verify class. ",
-    "version": "1.0.0",
+    "version": "1.0.0-alpha",
     "keywords": ["laravel", "api", "sign", "verify"],
     "homepage": "https://github.com/liuyuanjun/ssapi",
     "authors": [
