@@ -24,6 +24,12 @@ class SsApi
      */
     protected $timeDiff;
 
+    /**
+     * 请求重试次数
+     * @var int
+     */
+    protected $_retryTimes = 3;
+
     public function __construct(array $config)
     {
         $this->apiUrl = $config['api_url'];
@@ -39,6 +45,7 @@ class SsApi
      * @param string $method
      * @param array $headers
      * @return array
+     * @throws \Exception
      */
     public function request($api, $data = [], $method = 'get', $headers = [])
     {
@@ -49,32 +56,26 @@ class SsApi
             ->withHeaders($headers)
             ->asJson()
             ->$method();
+        if (empty($response))
+            throw new \Exception('request fail.');
         return $response;
     }
 
-    public function get($api, $data = [], $headers = [])
-    {
-        return $this->request($api, $data, 'get', $headers);
-    }
 
-    public function post($api, $data = [], $headers = [])
+    /**
+     * @param $name
+     * @param $arguments
+     * @return array
+     * @throws \Exception
+     */
+    public function __call($name, $arguments)
     {
-        return $this->request($api, $data, 'post', $headers);
-    }
-
-    public function put($api, $data = [], $headers = [])
-    {
-        return $this->request($api, $data, 'put', $headers);
-    }
-
-    public function patch($api, $data = [], $headers = [])
-    {
-        return $this->request($api, $data, 'patch', $headers);
-    }
-
-    public function delete($api, $data = [], $headers = [])
-    {
-        return $this->request($api, $data, 'delete', $headers);
+        $name = strtolower($name);
+        if (!in_array($name, ['get', 'post', 'put', 'patch', 'delete']))
+            throw new \Exception('undefined method.');
+        return retry($this->retryTimes, function ($name, $arguments) use ($name, $arguments) {
+            return $this->request($arguments[0], $arguments[1], $name, $arguments[2]);
+        }, 0);
     }
 
     /**
@@ -106,6 +107,7 @@ class SsApi
      */
     public static function verify($data, $config)
     {
+        $config['time_diff'] = $config['time_diff'] ?? 300;
         if (!isset($data['_timestamp']) || !isset($data['_sign']))
             return false; //Arguments missing
         $timestamp = strtotime($data['_timestamp']);
