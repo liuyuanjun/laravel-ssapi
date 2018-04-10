@@ -26,7 +26,7 @@ class SsApiService
     }
 
     /**
-     * ·şÎñ¶ËÑéÖ¤Ç©Ãû
+     * æœåŠ¡ç«¯éªŒè¯ç­¾å
      * @param array $data
      * @param array $config [app_secret, time_diff]
      * @return bool

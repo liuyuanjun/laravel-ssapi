@@ -19,7 +19,7 @@ class SsApi
      */
     protected $appSecret;
     /**
-     * ÑéÖ¤ÇëÇóÊ±¼äÎó²î
+     * éªŒè¯è¯·æ±‚æ—¶é—´è¯¯å·®
      * @var int
      */
     protected $timeDiff;
@@ -33,7 +33,7 @@ class SsApi
     }
 
     /**
-     * ÇëÇó½Ó¿Ú
+     * è¯·æ±‚æ¥å£
      * @param $api
      * @param array $data
      * @param string $method
@@ -43,7 +43,7 @@ class SsApi
     public function request($api, $data = [], $method = 'get', $headers = [])
     {
         $this->sign($data);
-        // ÓÃ·¨£ºhttps://github.com/ixudra/curl
+        // ç”¨æ³•ï¼šhttps://github.com/ixudra/curl
         $response = Curl::to($this->apiUrl . '/' . rtrim($api, '/'))
             ->withData($data)
             ->withHeaders($headers)
@@ -78,7 +78,7 @@ class SsApi
     }
 
     /**
-     * ²ÎÊıÇ©Ãû
+     * å‚æ•°ç­¾å
      * @param $data
      * @return string
      */
@@ -99,7 +99,7 @@ class SsApi
     }
 
     /**
-     * ·şÎñ¶ËÑéÖ¤Ç©Ãû
+     * æœåŠ¡ç«¯éªŒè¯ç­¾å
      * @param array $data
      * @param array $config
      * @return bool
