@@ -23,15 +23,6 @@ or run in terminal:
 
 ### Laravel usage
 
-The package provides an easy interface for sending cURL requests from your application. The package provides a fluent
-interface similar the Laravel query builder to easily configure the request. There are several utility methods that allow
-you to easily add certain options to the request. If no utility method applies, you can also use the general `withOption`
-method.
-
-### Sending GET requests
-
-In order to send a `GET` request, you need to use the `get()` method that is provided by the package:
-
 ```php
 
     use Liuyuanjun\SsApi\Facades\SsApi;
