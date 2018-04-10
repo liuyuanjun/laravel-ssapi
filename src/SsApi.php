@@ -73,7 +73,7 @@ class SsApi
         $name = strtolower($name);
         if (!in_array($name, ['get', 'post', 'put', 'patch', 'delete']))
             throw new \Exception('undefined method.');
-        return retry($this->retryTimes, function ($name, $arguments) use ($name, $arguments) {
+        return retry($this->retryTimes, function () use ($name, $arguments) {
             return $this->request($arguments[0], $arguments[1], $name, $arguments[2]);
         }, 0);
     }
