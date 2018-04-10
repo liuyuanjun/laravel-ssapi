@@ -87,7 +87,7 @@ class SsApi
     {
         if (isset($data['_sign']))
             unset($data['_sign']);
-        $data['app_id'] = $this->appKey;
+        $data['app_key'] = $this->appKey;
         $data['_timestamp'] = date('Y-m-d H:i:s');
         $signStr = $this->appSecret;
         ksort($data);
