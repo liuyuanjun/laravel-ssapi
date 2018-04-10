@@ -19,6 +19,10 @@ Pull this package in through Composer.
 or run in terminal:
 `composer require liuyuanjun/ssapi`
 
+then copy the config file
+
+`php artisan vendor:publish`
+
 ## Usage
 
 ### Laravel usage
