@@ -2,6 +2,7 @@
 
 namespace Liuyuanjun\SsApi;
 
+use Illuminate\Support\Facades\App;
 use Ixudra\Curl\Facades\Curl;
 
 class SsApi
