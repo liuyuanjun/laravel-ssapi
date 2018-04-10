@@ -58,7 +58,7 @@ class SsApi
         $this->sign($data);
         // 用法：https://github.com/ixudra/curl
         $curl = Curl::to($this->apiUrl . '/' . rtrim($api, '/'));
-        App::environment('local') && $curl->enableDebug(storage_path('logs/ssapi/curl.log'));
+        App::environment('local') && $curl->enableDebug(storage_path('logs/ssapi-curl.log'));
         $response = $curl->withData($data)
             ->withHeaders($headers)
             ->asJson()
@@ -110,7 +110,7 @@ class SsApi
     /**
      * 服务端验证签名
      * @param array $data
-     * @param array $config
+     * @param array $config [app_secret, time_diff]
      * @return bool
      */
     public static function verify($data, $config)
